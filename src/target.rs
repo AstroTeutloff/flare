@@ -1,20 +1,20 @@
-use crate::observer::Observer;
-use crate::spatial::{DEGRA, great_circle_distance, radec2lb, deg2dms, deg2hms};
-use crate::time::Time;
 use crate::corrections::refraction;
+use crate::observer::Observer;
+use crate::spatial::{deg2dms, deg2hms, great_circle_distance, radec2lb, DEGRA};
+use crate::time::Time;
 
 /// Target struct
-/// 
+///
 /// This struct represents a target in the sky.
-/// 
+///
 /// # Attributes
-/// 
+///
 /// * `name` - Optional name of the target
 /// * `ra` - Right ascension of the target in degrees
 /// * `dec` - Declination of the target in degrees
-/// 
+///
 /// # Methods
-/// 
+///
 /// * `new` - Create a new Target
 /// * `altitude` - Calculate the altitude of the target at a given time
 /// * `airmass` - Calculate the airmass of the target at a given time
@@ -23,12 +23,12 @@ use crate::corrections::refraction;
 /// * `to_string` - Convert the target to a string
 /// * `radec2hmsdms` - Convert the target to a tuple of strings with RA and DEC in HMS and DMS format
 /// * `radec2lb` - Compute the Galactic coordinates of the target
-/// 
+///
 /// # Examples
-/// 
+///
 /// ```
 /// use flare::Target;
-/// 
+///
 /// let target = Target::new(6.374817, 20.242942, Some("Vega"));
 /// println!("{}", target.to_string());
 /// ```
@@ -38,34 +38,34 @@ pub struct Target<'a> {
     pub dec: f64,
 }
 
-impl <'a> Target<'a> {
+impl<'a> Target<'a> {
     /// Create a new Target
-    /// 
+    ///
     /// # Arguments
-    /// 
+    ///
     /// * `ra` - Right ascension of the target in degrees
     /// * `dec` - Declination of the target in degrees
     /// * `name` - Optional name of the target
-    /// 
+    ///
     /// # Returns
-    /// 
+    ///
     /// * `Target` - A new Target object
-    /// 
+    ///
     /// # Examples
-    /// 
+    ///
     /// ```
     /// use flare::Target;
-    /// 
+    ///
     /// let target = Target::new(6.374817, 20.242942, Some("Vega"));
     /// assert_eq!(target.ra, 6.374817);
     /// assert_eq!(target.dec, 20.242942);
     /// assert_eq!(target.name, Some("Vega"));
     /// println!("{}", target.to_string());
     /// ```
-    /// 
+    ///
     /// ```
     /// use flare::Target;
-    /// 
+    ///
     /// let target = Target::new(6.374817, 20.242942, None);
     /// assert_eq!(target.ra, 6.374817);
     /// assert_eq!(target.dec, 20.242942);
@@ -77,72 +77,72 @@ impl <'a> Target<'a> {
     }
 
     /// Calculate the altitude of the target at a given time
-    /// 
+    ///
     /// # Arguments
-    /// 
+    ///
     /// * `observer` - Observer object representing the observer
     /// * `time` - Time object representing the time at which to calculate the altitude
-    /// 
+    ///
     /// # Returns
-    /// 
+    ///
     /// * `f64` - The altitude of the target in degrees
-    /// 
+    ///
     /// # Examples
-    /// 
+    ///
     /// ```
     /// use flare::{Observer, Target, Time};
-    /// 
+    ///
     /// let observer = Observer::new(33.3633675, -116.8361345, 1870.0, None);
     /// let target = Target::new(6.374817, 20.242942, None);
     /// let time = Time::new(2024, 8, 24, 6, 35, 34);
-    /// 
+    ///
     /// let alt = target.altitude(&observer, &time);
     /// println!("Altitude: {}", alt);
     /// assert!((alt - 42.893915).abs() < 1e-6);
     /// ```
-    /// 
+    ///
     /// # Notes
-    /// 
+    ///
     /// This altitude calculation is quite simple and does not take into account refraction or other atmospheric effects.
     /// For a more accurate calculation, consider using another dedicated library.
     pub fn altitude(&self, observer: &Observer, time: &Time) -> f64 {
         let (ra, dec) = (self.ra, self.dec);
-    
+
         let ha = ((observer.local_sidereal_time(time) - ra) % 360.0) * DEGRA;
         let lat = observer.lat * DEGRA;
         let dec = dec * DEGRA;
-    
+
         let alt = (dec.sin() * lat.sin() + dec.cos() * lat.cos() * ha.cos()).asin() / DEGRA;
         alt + refraction(alt)
     }
 
     /// Calculate the airmass of the target at a given time
-    /// 
+    ///
     /// # Arguments
-    /// 
+    ///
     /// * `observer` - Observer object representing the observer
     /// * `time` - Time object representing the time at which to calculate the airmass
-    /// 
+    ///
     /// # Returns
-    /// 
+    ///
     /// * `f64` - The airmass of the target
-    /// 
+    ///
     /// # Examples
-    /// 
+    ///
     /// ```
     /// use flare::{Observer, Target, Time};
-    /// 
+    ///
     /// let observer = Observer::new(33.3633675, -116.8361345, 1870.0, None);
     /// let target = Target::new(6.374817, 20.242942, None);
     /// let time = Time::new(2024, 8, 24, 6, 34, 0);
-    /// 
+    ///
     /// let airmass = target.airmass(&observer, &time);
     /// println!("Airmass: {}", airmass);
     /// assert!((airmass - 1.476094).abs() < 1e-6);
     /// ```
-    /// 
+    ///
     /// # Notes
-    /// 
+    ///
     /// This airmass calculation is quite simple and does not take into account refraction or other atmospheric effects.
     /// For a more accurate calculation, consider using another dedicated library.
     pub fn airmass(&self, observer: &Observer, time: &Time) -> f64 {
@@ -155,20 +155,20 @@ impl <'a> Target<'a> {
     }
 
     /// Calculate the separation to another target
-    /// 
+    ///
     /// # Arguments
-    /// 
+    ///
     /// * `other` - The other target
-    /// 
+    ///
     /// # Returns
-    /// 
+    ///
     /// * `f64` - The separation in degrees
-    /// 
+    ///
     /// # Examples
-    /// 
+    ///
     /// ```
     /// use flare::Target;
-    /// 
+    ///
     /// let target1 = Target::new(6.374817, 20.242942, None);
     /// let target2 = Target::new(6.374817, 21.242942, None);
     /// assert_eq!((target1.separation(&target2) - 1.0).abs() < 1e-6, true);
@@ -178,26 +178,26 @@ impl <'a> Target<'a> {
     }
 
     /// Calculate the separations to a list of other targets
-    /// 
+    ///
     /// # Arguments
-    /// 
+    ///
     /// * `others` - A vector of other targets
-    /// 
+    ///
     /// # Returns
-    /// 
+    ///
     /// * `Vec<f64>` - A vector of separations in degrees
-    /// 
+    ///
     /// # Examples
-    /// 
+    ///
     /// ```
     /// use flare::Target;
-    /// 
+    ///
     /// let target = Target::new(6.374817, 20.242942, None);
     /// let target1 = Target::new(6.374817, 21.242942, None);
     /// let target2 = Target::new(6.374817, 22.242942, None);
     /// let target3 = Target::new(6.374817, 23.242942, None);
     /// let others = vec![target1, target2, target3];
-    /// 
+    ///
     /// let separations = target.separations(&others);
     /// assert_eq!(separations.len(), 3);
     /// assert_eq!((separations[0] - 1.0).abs() < 1e-6, true);
@@ -213,24 +213,24 @@ impl <'a> Target<'a> {
     }
 
     /// Convert the target to a string
-    /// 
+    ///
     /// # Returns
-    /// 
+    ///
     /// * `String` - The target as a string
-    /// 
+    ///
     /// # Examples
-    /// 
+    ///
     /// ```
     /// use flare::Target;
-    /// 
+    ///
     /// let target = Target::new(6.374817, 20.242942, Some("Vega"));
     /// assert_eq!(target.to_string(), "Name: Vega, RA: 6.374817, DEC: 20.242942");
     /// println!("{}", target.to_string());
     /// ```
-    /// 
+    ///
     /// ```
     /// use flare::Target;
-    /// 
+    ///
     /// let target = Target::new(6.374817, 20.242942, None);
     /// assert_eq!(target.to_string(), "RA: 6.374817, DEC: 20.242942 (no name)");
     /// println!("{}", target.to_string());
@@ -243,16 +243,16 @@ impl <'a> Target<'a> {
     }
 
     /// Convert the target to a tuple of strings with RA and DEC in HMS and DMS format
-    /// 
+    ///
     /// # Returns
-    /// 
+    ///
     /// * (`String`, `String`) - The target as a string with RA and DEC in HMS and DMS format
-    /// 
+    ///
     /// # Examples
-    /// 
+    ///
     /// ```
     /// use flare::Target;
-    /// 
+    ///
     /// let target = Target::new(6.374817, 20.242942, Some("Vega"));
     /// let (hms, dms) = target.radec2hmsdms();
     /// assert_eq!(hms, "00:25:29.9561");
@@ -264,16 +264,16 @@ impl <'a> Target<'a> {
     }
 
     /// Compute the Galactic coordinates of the target
-    /// 
+    ///
     /// # Returns
-    /// 
+    ///
     /// * (`f64`, `f64`) - The Galactic longitude and latitude of the target in degrees
-    /// 
+    ///
     /// # Examples
-    /// 
+    ///
     /// ```
     /// use flare::Target;
-    /// 
+    ///
     /// let target = Target::new(6.374817, 20.242942, Some("Vega"));
     /// let (l, b) = target.radec2lb();
     /// assert_eq!((l - 114.706509).abs() < 1e-6, true);
@@ -283,10 +283,9 @@ impl <'a> Target<'a> {
     pub fn radec2lb(&self) -> (f64, f64) {
         radec2lb(self.ra, self.dec)
     }
-
 }
 
-impl <'a> std::fmt::Display for Target<'a> {
+impl<'a> std::fmt::Display for Target<'a> {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
         if let Some(name) = &self.name {
             write!(f, "Name: {}, RA: {}, DEC: {}", name, self.ra, self.dec)
