@@ -6,5 +6,8 @@ fn main() {
 
     let separation = target1.separation(&target2);
 
-    println!("The angular separation between the two targets is: {}", separation);
+    println!(
+        "The angular separation between the two targets is: {}",
+        separation
+    );
 }

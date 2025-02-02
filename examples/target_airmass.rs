@@ -1,4 +1,4 @@
-use flare::{Target, Observer, Time};
+use flare::{Observer, Target, Time};
 
 fn main() {
     let observer = Observer::new(30.0, 45.0, 1800.0, Some("A"));

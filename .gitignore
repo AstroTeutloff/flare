@@ -3,3 +3,5 @@
 /experimental
 /.vscode
 /env
+.DS_Store
+*~
