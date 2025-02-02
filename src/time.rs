@@ -1,20 +1,20 @@
-use chrono::{DateTime, Datelike, Timelike, Utc, TimeZone};
+use chrono::{DateTime, Datelike, TimeZone, Timelike, Utc};
 
 /// Time struct
-/// 
+///
 /// This struct represents a time.
-/// 
+///
 /// # Attributes
-/// 
+///
 /// * `year` - Year
 /// * `month` - Month
 /// * `day` - Day
 /// * `hour` - Hour
 /// * `minute` - Minute
 /// * `second` - Second
-/// 
+///
 /// # Methods
-/// 
+///
 /// * `new` - Create a new Time
 /// * `now` - Get the current time
 /// * `from_utc` - Create a new Time from a `DateTime<Utc>`
@@ -26,12 +26,12 @@ use chrono::{DateTime, Datelike, Timelike, Utc, TimeZone};
 /// * `to_gst` - Convert the Time to a Greenwich Sidereal Time
 /// * `to_utc` - Convert the Time to a `DateTime<Utc>`
 /// * `to_string` - Convert the Time to a string
-/// 
+///
 /// # Examples
-/// 
+///
 /// ```
 /// use flare::Time;
-/// 
+///
 /// let date = Time::new(2020, 1, 1, 0, 0, 0);
 /// assert!(date.year == 2020);
 /// assert!(date.month == 1);
@@ -52,25 +52,25 @@ pub struct Time {
 
 impl Time {
     /// Create a new Time
-    /// 
+    ///
     /// # Arguments
-    /// 
+    ///
     /// * `year` - Year
     /// * `month` - Month
     /// * `day` - Day
     /// * `hour` - Hour
     /// * `minute` - Minute
     /// * `second` - Second
-    /// 
+    ///
     /// # Returns
-    /// 
+    ///
     /// * `Time` - A new Time object
-    /// 
+    ///
     /// # Examples
-    /// 
+    ///
     /// ```
     /// use flare::Time;
-    /// 
+    ///
     /// let date = Time::new(2020, 1, 1, 0, 0, 0);
     /// assert!(date.year == 2020);
     /// assert!(date.month == 1);
@@ -91,16 +91,16 @@ impl Time {
     }
 
     /// Get the current time
-    /// 
+    ///
     /// # Returns
-    /// 
+    ///
     /// * `Time` - A new Time object representing the current time
-    /// 
+    ///
     /// # Examples
-    /// 
+    ///
     /// ```
     /// use flare::Time;
-    /// 
+    ///
     /// let date = Time::now();
     /// assert!(date.year > 2023);
     /// ```
@@ -117,21 +117,21 @@ impl Time {
     }
 
     /// Create a new Time from a `DateTime<Utc>`
-    /// 
+    ///
     /// # Arguments
-    /// 
+    ///
     /// * `utc` - `DateTime<Utc>` object
-    /// 
+    ///
     /// # Returns
-    /// 
+    ///
     /// * `Time` - A new Time object
-    /// 
+    ///
     /// # Examples
-    /// 
+    ///
     /// ```
     /// use chrono::{DateTime, Datelike, Timelike, Utc, TimeZone};
     /// use flare::Time;
-    /// 
+    ///
     /// let utc = Utc.with_ymd_and_hms(2020, 1, 1, 0, 0, 0).unwrap();
     /// let date = Time::from_utc(utc);
     /// assert!(date.year == utc.year());
@@ -153,20 +153,20 @@ impl Time {
     }
 
     /// Create a new Time from an ISO 8601 string
-    /// 
+    ///
     /// # Arguments
-    /// 
+    ///
     /// * `isot` - ISO 8601 string
-    /// 
+    ///
     /// # Returns
-    /// 
+    ///
     /// * `Time` - A new Time object
-    /// 
+    ///
     /// # Examples
-    /// 
+    ///
     /// ```
     /// use flare::Time;
-    /// 
+    ///
     /// let isot = "2020-01-01T00:00:00Z";
     /// let date = Time::from_isot_str(isot);
     /// assert!(date.year == 2020);
@@ -189,20 +189,20 @@ impl Time {
     }
 
     /// Create a new Time from a Julian Date
-    /// 
+    ///
     /// # Arguments
-    /// 
+    ///
     /// * `jd` - Julian Date
-    /// 
+    ///
     /// # Returns
-    /// 
+    ///
     /// * `Time` - A new Time object
-    /// 
+    ///
     /// # Examples
-    /// 
+    ///
     /// ```
     /// use flare::Time;
-    /// 
+    ///
     /// let jd = 2460564.0569609753;
     /// let date = Time::from_jd(jd);
     /// println!("{:?}", date);
@@ -248,20 +248,20 @@ impl Time {
     }
 
     /// Create a new Time from a Modified Julian Date
-    /// 
+    ///
     /// # Arguments
-    /// 
+    ///
     /// * `mjd` - Modified Julian Date
-    /// 
+    ///
     /// # Returns
-    /// 
+    ///
     /// * `Time` - A new Time object
-    /// 
+    ///
     /// # Examples
-    /// 
+    ///
     /// ```
     /// use flare::Time;
-    /// 
+    ///
     /// let mjd = 58849.0;
     /// let date = Time::from_mjd(mjd);
     /// assert!(date.year == 2020);
@@ -276,16 +276,16 @@ impl Time {
     }
 
     /// Convert the Time to a Julian Date
-    /// 
+    ///
     /// # Returns
-    /// 
+    ///
     /// * `f64` - Julian Date
-    /// 
+    ///
     /// # Examples
-    /// 
+    ///
     /// ```
     /// use flare::Time;
-    /// 
+    ///
     /// let date = Time::new(2024, 8, 24, 6, 35, 34);
     /// let jd = date.to_jd();
     /// assert_eq!(jd, 2460546.774699074);
@@ -299,22 +299,24 @@ impl Time {
         let second = self.second as f64;
 
         let jd = 367.0 * year - ((year + ((month + 9.0) / 12.0)).floor() * 7.0 / 4.0).floor()
-            + ((275.0 * month) / 9.0).floor() + day + 1721013.5
+            + ((275.0 * month) / 9.0).floor()
+            + day
+            + 1721013.5
             + ((hour + (minute / 60.0) + (second / 3600.0)) / 24.0);
         jd
     }
 
     /// Convert the Time to a Modified Julian Date
-    /// 
+    ///
     /// # Returns
-    /// 
+    ///
     /// * `f64` - Modified Julian Date
-    /// 
+    ///
     /// # Examples
-    /// 
+    ///
     /// ```
     /// use flare::Time;
-    /// 
+    ///
     /// let date = Time::new(2024, 8, 24, 6, 35, 34);
     /// let mjd = date.to_mjd();
     /// assert_eq!(mjd, 60546.274699074216);
@@ -324,16 +326,16 @@ impl Time {
     }
 
     /// Convert the Time to a Greenwich Sidereal Time
-    /// 
+    ///
     /// # Returns
-    /// 
+    ///
     /// * `f64` - Greenwich Sidereal Time in degrees
-    /// 
+    ///
     /// # Examples
-    /// 
+    ///
     /// ```
     /// use flare::Time;
-    /// 
+    ///
     /// let date = Time::new(2024, 8, 24, 6, 35, 34);
     /// let gst = date.to_gst();
     /// assert_eq!(gst, 71.92783272871748);
@@ -341,24 +343,23 @@ impl Time {
     pub fn to_gst(&self) -> f64 {
         let jd = self.to_jd();
         let t = (jd - 2451545.0) / 36525.0;
-        let gst = 280.46061837 + 360.98564736629 * (jd - 2451545.0)
-            + 0.000387933 * t * t
+        let gst = 280.46061837 + 360.98564736629 * (jd - 2451545.0) + 0.000387933 * t * t
             - (t * t * t) / 38710000.0;
         gst % 360.0
     }
 
     /// Convert the Time to a `DateTime<Utc>`
-    /// 
+    ///
     /// # Returns
-    /// 
+    ///
     /// * `DateTime<Utc>` - `DateTime<Utc>` object
-    /// 
+    ///
     /// # Examples
-    /// 
+    ///
     /// ```
     /// use flare::Time;
     /// use chrono::{DateTime, Utc};
-    /// 
+    ///
     /// let date = Time::new(2024, 8, 24, 6, 35, 34);
     /// let utc = date.to_utc();
     /// let utc_str = utc.to_string();
@@ -372,41 +373,42 @@ impl Time {
             self.hour,
             self.minute,
             self.second,
-        ).unwrap()
+        )
+        .unwrap()
     }
 
     /// Convert the Time to a string
-    /// 
+    ///
     /// # Arguments
-    /// 
+    ///
     /// * `format` - Format of the string
-    /// 
+    ///
     /// # Returns
-    /// 
+    ///
     /// * `String` - String representation of the Time
-    /// 
+    ///
     /// # Examples
-    /// 
+    ///
     /// ```
     /// use flare::Time;
-    /// 
+    ///
     /// let date = Time::new(2020, 1, 1, 0, 0, 0);
     /// let jd_str = date.to_string(Some("jd"));
     /// assert_eq!(jd_str, "2458849.5");
-    /// 
+    ///
     /// let mjd_str = date.to_string(Some("mjd"));
     /// assert_eq!(mjd_str, "58849");
-    /// 
+    ///
     /// let utc_str = date.to_string(Some("utc"));
     /// assert_eq!(utc_str, "2020-01-01 00:00:00 UTC");
-    /// 
+    ///
     /// let isot_str = date.to_string(Some("isot"));
     /// assert_eq!(isot_str, "2020-01-01T00:00:00+00:00");
     /// ```
-    /// 
+    ///
     /// ```
     /// use flare::Time;
-    /// 
+    ///
     /// let date = Time::new(2020, 1, 1, 0, 0, 0);
     /// let str = date.to_string(None);
     /// assert_eq!(str, "2020-01-01 00:00:00 UTC");
@@ -432,6 +434,10 @@ impl Time {
 
 impl std::fmt::Display for Time {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
-        write!(f, "{}-{:02}-{:02} {:02}:{:02}:{:02}", self.year, self.month, self.day, self.hour, self.minute, self.second)
+        write!(
+            f,
+            "{}-{:02}-{:02} {:02}:{:02}:{:02}",
+            self.year, self.month, self.day, self.hour, self.minute, self.second
+        )
     }
 }

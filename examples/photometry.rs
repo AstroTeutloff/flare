@@ -1,4 +1,4 @@
-use flare::phot::{mag_to_flux, flux_to_mag, limmag_to_fluxerr, fluxerr_to_limmag, ZP};
+use flare::phot::{flux_to_mag, fluxerr_to_limmag, limmag_to_fluxerr, mag_to_flux, ZP};
 
 fn main() {
     let mag = 20.0;
