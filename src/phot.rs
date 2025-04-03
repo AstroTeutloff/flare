@@ -32,7 +32,6 @@ pub fn mag_to_flux(mag: f64, magerr: f64, zp: f64) -> (f64, f64) {
     (flux, fluxerr)
 }
 
-
 /// Convert a limiting magnitude to a flux error
 ///
 /// # Arguments

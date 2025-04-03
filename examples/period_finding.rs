@@ -6,6 +6,7 @@ fn main() {
     // measured at N random times over a 6 years period.
     let n_points = 1000;
     let period = 0.25; // in days
+
     // we don't want evenly spaced data, so let's randomly sample times over 6 years
     // so we grab random floats between 0 and 6*365 days (6 years)
     let mut rng = rand::rng();
@@ -20,7 +21,8 @@ fn main() {
 
     // Now generate the sinusoidal light curve with some noise
     let noise_level = 0.1; // noise in magnitude
-    let y: Vec<f64> = t.iter()
+    let y: Vec<f64> = t
+        .iter()
         .map(|&time| {
             // Simulate a sinusoidal light curve with some noise
             let true_value = (2.0 * std::f64::consts::PI * time / period).sin();
@@ -29,7 +31,6 @@ fn main() {
         })
         .collect();
 
-    
     // Define frequency grid, with a min freq of 10 days
     // and a maximum frequency of 5 minutes
     let f_min = 1.0 / (10.0 * 24.0 * 60.0);
@@ -49,12 +50,5 @@ fn main() {
 
     let period = 1.0 / best_freq * 24.0; // convert from frequency in days to a period in hours
 
-    println!(
-        "Period: {:.2} hours, statistic: {:.2}",
-        period,
-        best_stat
-    );
-    
-
-    
+    println!("Period: {:.2} hours, statistic: {:.2}", period, best_stat);
 }
