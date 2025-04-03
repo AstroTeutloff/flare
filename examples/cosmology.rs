@@ -25,5 +25,10 @@ fn main() {
 
     let z = 0.0246;
     let dm = cosmology.dm(z);
-    println!("Distance modulus at z={} (using custom cosmology {}) is {}", z, cosmology.name.unwrap(), dm);
+    println!(
+        "Distance modulus at z={} (using custom cosmology {}) is {}",
+        z,
+        cosmology.name.unwrap(),
+        dm
+    );
 }

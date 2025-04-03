@@ -7,21 +7,21 @@ const RGE: [[f64; 3]; 3] = [
 ];
 
 /// Convert RA and DEC to Galactic coordinates
-/// 
+///
 /// # Arguments
-/// 
+///
 /// * `ra` - Right Ascension in degrees
 /// * `dec` - Declination in degrees
-/// 
+///
 /// # Returns
-/// 
+///
 /// * `(f64, f64)` - Tuple containing Galactic longitude and latitude in degrees
-/// 
+///
 /// # Examples
-/// 
+///
 /// ```
 /// use flare::spatial::radec2lb;
-/// 
+///
 /// let ra = 45.0;
 /// let dec = 45.0;
 /// let (l, b) = radec2lb(ra, dec);
@@ -52,20 +52,20 @@ pub fn radec2lb(ra: f64, dec: f64) -> (f64, f64) {
 }
 
 /// Convert degrees to hours, minutes, and seconds
-/// 
+///
 /// # Arguments
-/// 
+///
 /// * `deg` - Angle in degrees
-/// 
+///
 /// # Returns
-/// 
+///
 /// * `String` - String representation of the angle in hours, minutes, and seconds
-/// 
+///
 /// # Examples
-/// 
+///
 /// ```
 /// use flare::spatial::deg2hms;
-/// 
+///
 /// let deg = 45.0;
 /// let hms = deg2hms(deg);
 /// assert_eq!(hms, "03:00:00.0000");
@@ -86,20 +86,20 @@ pub fn deg2hms(deg: f64) -> String {
 }
 
 /// Convert degrees to degrees, minutes, and seconds
-/// 
+///
 /// # Arguments
-/// 
+///
 /// * `deg` - Angle in degrees
-/// 
+///
 /// # Returns
-/// 
+///
 /// * `String` - String representation of the angle in degrees, minutes, and seconds
-/// 
+///
 /// # Examples
-/// 
+///
 /// ```
 /// use flare::spatial::deg2dms;
-/// 
+///
 /// let deg = 45.0;
 /// let dms = deg2dms(deg);
 /// assert_eq!(dms, "45:00:00.000");
@@ -120,23 +120,23 @@ pub fn deg2dms(deg: f64) -> String {
 
 /// Calculate the great circle distance between two points on the celestial sphere
 ///     using the Haversine formula
-/// 
+///
 /// # Arguments
-/// 
+///
 /// * `ra1_deg` - Right Ascension of the first point in degrees
 /// * `dec1_deg` - Declination of the first point in degrees
 /// * `ra2_deg` - Right Ascension of the second point in degrees
 /// * `dec2_deg` - Declination of the second point in degrees
-/// 
+///
 /// # Returns
-/// 
+///
 /// * `f64` - Great circle distance in degrees
-/// 
+///
 /// # Examples
-/// 
+///
 /// ```
 /// use flare::spatial::great_circle_distance;
-/// 
+///
 /// let ra1 = 45.0;
 /// let dec1 = 45.0;
 /// let ra2 = 46.0;
@@ -160,9 +160,9 @@ pub fn great_circle_distance(ra1_deg: f64, dec1_deg: f64, ra2_deg: f64, dec2_deg
 }
 
 /// Determine if a point is within an ellipse
-/// 
+///
 /// # Arguments
-/// 
+///
 /// * `alpha` - Right Ascension of the point in degrees
 /// * `delta0` - Declination of the point in degrees
 /// * `alpha1` - Right Ascension of the center of the ellipse in degrees
@@ -170,16 +170,16 @@ pub fn great_circle_distance(ra1_deg: f64, dec1_deg: f64, ra2_deg: f64, dec2_deg
 /// * `d0` - Distance from the center of the ellipse to the edge in degrees
 /// * `axis_ratio` - Ratio of the minor axis to the major axis
 /// * `pao` - Position angle of the minor axis in degrees
-/// 
+///
 /// # Returns
-/// 
+///
 /// * `bool` - True if the point is within the ellipse, false otherwise
-/// 
+///
 /// # Examples
-/// 
+///
 /// ```
 /// use flare::spatial::in_ellipse;
-/// 
+///
 /// let alpha = 45.0;
 /// let delta0 = 45.0;
 /// let alpha1 = 46.0;
@@ -189,7 +189,7 @@ pub fn great_circle_distance(ra1_deg: f64, dec1_deg: f64, ra2_deg: f64, dec2_deg
 /// let pao = 0 as f64;
 /// let inside = in_ellipse(alpha, delta0, alpha1, delta01, d0, axis_ratio, pao);
 /// assert_eq!(inside, false);
-/// 
+///
 /// let d0 = 1.23;
 /// let inside = in_ellipse(alpha, delta0, alpha1, delta01, d0, axis_ratio, pao);
 /// assert_eq!(inside, true);
