@@ -32,6 +32,34 @@ pub fn mag_to_flux(mag: f64, magerr: f64, zp: f64) -> (f64, f64) {
     (flux, fluxerr)
 }
 
+
+/// Convert a limiting magnitude to a flux error
+/// 
+/// # Arguments
+/// 
+/// * `limmag` - Limiting magnitude
+/// * `zp` - Zero point
+/// * `sigma` - Sigma
+/// 
+/// # Returns
+/// 
+/// * `f64` - Flux error
+/// 
+/// # Examples
+/// 
+/// ```
+/// use flare::phot::{limmag_to_fluxerr, ZP};
+/// 
+/// let limmag = 19.652575;
+/// let sigma = 5.0;
+/// let fluxerr = limmag_to_fluxerr(limmag, ZP, sigma);
+/// println!("{}", fluxerr);
+/// assert_eq!((fluxerr - 10.0).abs() < 1e-6, true);
+/// ```
+pub fn limmag_to_fluxerr(limmag: f64, zp: f64, sigma: f64) -> f64 {
+    10.0_f64.powf((limmag - zp) / -2.5) / sigma
+}
+
 /// Convert a flux to a magnitude
 /// 
 /// # Arguments
@@ -61,34 +89,6 @@ pub fn flux_to_mag(flux: f64, fluxerr: f64, zp: f64) -> (f64, f64) {
     let mag = zp - 2.5 * (flux).log10();
     let magerr = FACTOR * fluxerr / flux;
     (mag, magerr)
-}
-
-
-/// Convert a limiting magnitude to a flux error
-/// 
-/// # Arguments
-/// 
-/// * `limmag` - Limiting magnitude
-/// * `zp` - Zero point
-/// * `sigma` - Sigma
-/// 
-/// # Returns
-/// 
-/// * `f64` - Flux error
-/// 
-/// # Examples
-/// 
-/// ```
-/// use flare::phot::{limmag_to_fluxerr, ZP};
-/// 
-/// let limmag = 19.652575;
-/// let sigma = 5.0;
-/// let fluxerr = limmag_to_fluxerr(limmag, ZP, sigma);
-/// println!("{}", fluxerr);
-/// assert_eq!((fluxerr - 10.0).abs() < 1e-6, true);
-/// ```
-pub fn limmag_to_fluxerr(limmag: f64, zp: f64, sigma: f64) -> f64 {
-    10.0_f64.powf((limmag - zp) / -2.5) / sigma
 }
 
 /// Convert a flux error to a limiting magnitude

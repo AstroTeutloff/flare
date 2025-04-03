@@ -5,6 +5,7 @@ pub mod target;
 pub mod cosmo;
 pub mod phot;
 pub mod corrections;
+pub mod period;
 
 pub use cosmo::Cosmo;
 pub use observer::Observer;
