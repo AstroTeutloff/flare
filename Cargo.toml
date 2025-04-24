@@ -1,6 +1,6 @@
 [package]
 name = "flare"
-version = "0.1.0"
+version = "0.2.0"
 edition = "2021"
 authors = ["Theophile du Laz"]
 description = "A lightweight library to perform basic astronomical calculations, inspired by Python's Astropy syntax."
@@ -10,4 +10,4 @@ keywords = ["astronomy", "astrophysics", "ephemerides", "time", "coordinates"]
 
 [dependencies]
 chrono = ">=0.4.0"
-rand = "0.9.0"
+rand = ">=0.9.0"
